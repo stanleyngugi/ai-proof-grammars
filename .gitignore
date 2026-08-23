@@ -1,0 +1,7 @@
+﻿mathlib4/
+batteries/
+models/
+__pycache__/
+*.pyc
+*.tgz
+.lake/

@@ -1,0 +1,7 @@
+﻿lark>=1.1
+openai>=1.0
+llguidance>=0.6
+# GPU serving (post 2) - tested stack:
+vllm==0.10.2 ; platform_system == "Linux"
+transformers<5 ; platform_system == "Linux"
+huggingface_hub

@@ -1,0 +1,92 @@
+// Lean 4 tactic-line grammar for llguidance (vLLM "guidance" backend).
+// Derived from the 53-production Lark CFG in the research report, simplified
+// for llg: explicit WS terminals (no %ignore), no priorities, no regex
+// lookaheads. Deliberate policy differences from the post-hoc grammar:
+//   * `polyrith` EXCLUDED (confirmed dead in current Mathlib)
+//   * `sorry`/`admit`/`native_decide` NOT reachable (constraint forbids them)
+// ARGS is a permissive catch-all exactly as in the report's design.
+
+start: tactic
+
+tactic: rw_tac | simp_tac | exact_tac | apply_tac | refine_tac | have_tac
+      | obtain_tac | rintro_tac | intro_tac | ext_tac | rfl_tac | induction_tac
+      | cases_tac | by_cases_tac | calc_tac | classical_tac | constructor_tac
+      | contrapose_bang_tac | suffices_tac | focus_tac | rcases_tac | grind_tac
+      | gcongr_tac | linarith_tac | split_ifs_tac | infer_instance_tac
+      | aesop_tac | by_contra_tac | change_tac | congr_tac | convert_bang_tac
+      | positivity_tac | all_goals_tac | fin_cases_tac | case_arm_tac
+      | dsimp_tac | let_tac | lia_tac | fun_prop_tac | cat_disch_tac | use_tac
+      | ring_kw_tac | filter_upwards_tac | norm_cast_tac | unfold_tac
+      | grw_tac | norm_num_tac | decide_tac | subst_tac | cfc_tac_tac
+      | tauto_tac | finiteness_tac | contrapose_tac | generic_tac
+
+case_arm_tac: "|" _WS? /[^=\n]+/ _WS? "=>" (_WS tactic)?
+focus_tac: "\u00b7" (_WS tactic)?
+
+rw_tac:            "rw" _WS args
+simp_tac:          simp_kw (_WS args)?
+exact_tac:         exact_kw _WS args
+apply_tac:         "apply" _WS args
+refine_tac:        "refine" _WS args
+have_tac:          "have" _WS args
+obtain_tac:        "obtain" _WS args
+rintro_tac:        "rintro" _WS args
+intro_tac:         "intro" (_WS args)?
+ext_tac:           ext_kw (_WS args)?
+rfl_tac:           "rfl"
+induction_tac:     "induction" _WS args
+cases_tac:         "cases" _WS args
+by_cases_tac:      "by_cases" _WS args
+calc_tac:          "calc" _WS args
+classical_tac:     "classical"
+constructor_tac:   "constructor"
+contrapose_bang_tac: "contrapose!" (_WS args)?
+suffices_tac:      "suffices" _WS args
+rcases_tac:        "rcases" _WS args
+grind_tac:         "grind" (_WS args)?
+gcongr_tac:        "gcongr" (_WS args)?
+linarith_tac:      linarith_kw (_WS args)?
+split_ifs_tac:     "split_ifs" (_WS args)?
+infer_instance_tac: "infer_instance"
+aesop_tac:         aesop_kw (_WS args)?
+by_contra_tac:     "by_contra" (_WS args)?
+change_tac:        "change" _WS args
+congr_tac:         "congr" (_WS args)?
+convert_bang_tac:  convert_kw _WS args
+positivity_tac:    "positivity"
+all_goals_tac:     "all_goals" _WS args
+fin_cases_tac:     "fin_cases" _WS args
+dsimp_tac:         "dsimp" (_WS args)?
+let_tac:           "let" _WS args
+lia_tac:           "lia"
+fun_prop_tac:      "fun_prop" (_WS args)?
+cat_disch_tac:     "cat_disch"
+use_tac:           "use" _WS args
+ring_kw_tac:       ring_kw
+filter_upwards_tac: "filter_upwards" (_WS args)?
+norm_cast_tac:     norm_cast_kw (_WS args)?
+unfold_tac:        "unfold" _WS args
+grw_tac:           "grw" _WS args
+norm_num_tac:      "norm_num" (_WS args)?
+decide_tac:        "decide"
+subst_tac:         "subst" _WS args
+cfc_tac_tac:       "cfc_tac"
+tauto_tac:         "tauto"
+finiteness_tac:    "finiteness"
+contrapose_tac:    "contrapose" (_WS args)?
+
+// catch-all: any plausible identifier-led tactic (the macro-bridge layer)
+generic_tac: ident (_WS args)?
+
+simp_kw:      "simp" | "simpa" | "simp_all" | "simp_rw" | "nth_rw"
+exact_kw:     "exact" | "exact_mod_cast" | "rwa"
+ext_kw:       "ext" | "ext1" | "funext"
+linarith_kw:  "linarith" | "nlinarith"
+aesop_kw:     "aesop" | "aesop_graph" | "aesop_cat"
+convert_kw:   "convert!"
+ring_kw:      "ring" | "ring_nf" | "ring1"
+norm_cast_kw: "norm_cast" | "push_cast"
+
+ident: /[A-Za-z_\u0370-\u03FF][A-Za-z0-9_'!\u0370-\u03FF]*/
+args: /[^\n]+/
+_WS: /[ \t]+/
