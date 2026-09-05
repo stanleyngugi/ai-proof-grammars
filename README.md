@@ -1,11 +1,12 @@
-# Tactic Grammar Lab
+# Grammars for AI Proof Steps
 
-Experiments in Lean tactic grammars and constrained generation.
+Experiments in using grammars to guide AI-generated mathematical proof steps.
+The implementation uses Lean, a language and tool for computer-checked proofs.
 
 Companion code and evidence for two technical articles:
 
-1. [The Shape of a Lean Tactic](articles/01-tactic-cfg.md)
-2. [Lean Tactics Under Constraint](articles/02-constrained-decoding.md)
+1. [Building a Grammar for AI-Generated Mathematical Proof Steps](articles/01-tactic-cfg.md)
+2. [How a Grammar Changes AI-Generated Mathematical Proof Steps](articles/02-constrained-decoding.md)
 
 The September 2026 revision distinguishes **acceptance by a permissive CFG** from
 Lean syntax validity and proof success. The saved Qwen result reproduces: 420/640

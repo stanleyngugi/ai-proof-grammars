@@ -1,12 +1,12 @@
 cff-version: 1.2.0
 message: "Please cite this repository when using its code or saved-output analyses. The articles provide their own BibTeX citations."
-title: "Tactic Grammar Lab"
+title: "Grammars for AI Proof Steps"
 type: software
 authors:
   - family-names: Ngugi
     given-names: Stanley
-repository-code: "https://github.com/stanleyngugi/tactic-grammar-lab"
-url: "https://github.com/stanleyngugi/tactic-grammar-lab"
+repository-code: "https://github.com/stanleyngugi/ai-proof-grammars"
+url: "https://github.com/stanleyngugi/ai-proof-grammars"
 abstract: "Experiments in Lean tactic grammars and constrained generation, with saved model outputs and reproducible CPU analyses."
 license: MIT
 keywords:

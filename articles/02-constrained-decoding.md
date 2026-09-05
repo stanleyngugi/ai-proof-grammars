@@ -1,8 +1,10 @@
-# Lean Tactics Under Constraint
+# How a Grammar Changes AI-Generated Mathematical Proof Steps
 
 *The sampling mechanism, the saved results, and the boundary between grammar acceptance and Lean correctness.*
 
-> **Updated September 5, 2026.** Expanded from the August 22 article with decoding mechanics, traceable examples, exact counts, and corrected metric definitions. CFG acceptance is not measured Lean validity; latency and line fractions are reported accordingly. [Original version](/archive/revisions/2026-08-22-grammar-constrained-decoding-lean-original.html) · [Evidence and reproduction](https://github.com/stanleyngugi/tactic-grammar-lab/blob/main/docs/evidence.md).
+Lean is a language and tool for writing computer-checked mathematical proofs. A *tactic* is a command that advances a proof; this article studies grammars for those individual proof steps.
+
+> **Updated September 5, 2026.** Expanded from the August 22 article with decoding mechanics, traceable examples, exact counts, and corrected metric definitions. CFG acceptance is not measured Lean validity; latency and line fractions are reported accordingly. [Original version](/archive/revisions/2026-08-22-grammar-constrained-decoding-lean-original.html) · [Evidence and reproduction](https://github.com/stanleyngugi/ai-proof-grammars/blob/main/docs/evidence.md).
 
 A grammar changes which next tokens a language model is allowed to sample. That sounds like a formatting intervention, but its consequences propagate: once a different token is chosen, every later prediction sees a different prefix. The useful experimental question is how that change affects the outputs we actually receive.
 

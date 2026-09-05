@@ -1,8 +1,10 @@
-# The Shape of a Lean Tactic
+# Building a Grammar for AI-Generated Mathematical Proof Steps
 
 *What a small grammar captures, what its fallback gives away, and how to measure the difference.*
 
-> **Updated September 5, 2026.** Expanded from the August 22 article with executable examples, a grammar ablation, and explicit measurement definitions. The original corpus figures are retained as historical observations, with their extraction limitations explained below. [Original version](/archive/revisions/2026-08-22-lean-tactic-language-cfg-original.html) · [Evidence and reproduction](https://github.com/stanleyngugi/tactic-grammar-lab/blob/main/docs/evidence.md).
+Lean is a language and tool for writing computer-checked mathematical proofs. A *tactic* is a command that advances a proof; this article studies grammars for those individual proof steps.
+
+> **Updated September 5, 2026.** Expanded from the August 22 article with executable examples, a grammar ablation, and explicit measurement definitions. The original corpus figures are retained as historical observations, with their extraction limitations explained below. [Original version](/archive/revisions/2026-08-22-lean-tactic-language-cfg-original.html) · [Evidence and reproduction](https://github.com/stanleyngugi/ai-proof-grammars/blob/main/docs/evidence.md).
 
 A grammar for Lean tactics begins with an attractive observation. Many proof steps start with a familiar word: `rw`, `simp`, `exact`, `apply`, `intro`. Behind a large mathematical library there appears to be a comparatively small vocabulary of actions. If a language model repeatedly uses those actions, perhaps a compact grammar can guide its generation without representing the entirety of Lean.
 
