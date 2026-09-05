@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="490" viewBox="0 0 760 490" role="img" aria-labelledby="title desc">
+<title id="title">Extraction changes the counting unit</title><desc id="desc">A constructor and two focus branches become one flattened entry under the historical extractor.</desc>
+<rect width="760" height="490" rx="16" fill="#111827"/>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/></marker></defs>
+<text x="30" y="42" fill="#f3f4f6" font-size="25" font-family="system-ui, sans-serif">Extraction changes the counting unit</text>
+<rect x="30" y="65" width="700" height="145" rx="10" fill="#1f2937" stroke="#475569"/>
+<text x="50" y="96" fill="#93c5fd" font-size="14" font-family="system-ui, sans-serif">SOURCE PROOF BODY</text>
+<text x="50" y="126" fill="#f3f4f6" font-size="21" font-family="monospace">constructor</text>
+<text x="50" y="155" fill="#f3f4f6" font-size="21" font-family="monospace">· exact h.2</text>
+<text x="50" y="184" fill="#f3f4f6" font-size="21" font-family="monospace">· exact h.1</text>
+<path d="M380 215 L380 258" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="30" y="270" width="700" height="92" rx="10" fill="#1f2937" stroke="#475569"/>
+<text x="50" y="299" fill="#93c5fd" font-size="14" font-family="system-ui, sans-serif">HISTORICAL EXTRACTED ENTRY</text>
+<text x="50" y="335" fill="#f3f4f6" font-size="21" font-family="monospace">constructor · exact h.2 · exact h.1</text>
+<path d="M380 368 L380 398" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="50" y="431" fill="#f3f4f6" font-size="20" font-family="system-ui, sans-serif">One leading keyword is counted; the CFG accepts the entry.</text>
+<text x="50" y="462" fill="#cbd5e1" font-size="18" font-family="system-ui, sans-serif">Acceptance cannot establish that extraction was faithful.</text>
+</svg>

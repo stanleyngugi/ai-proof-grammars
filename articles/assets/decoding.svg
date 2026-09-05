@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="540" viewBox="0 0 760 540" role="img" aria-labelledby="title desc">
+<title id="title">Grammar-aware sampling</title><desc id="desc">Model probabilities and a tokenizer-aware matcher are combined to mask tokens; each sampled token updates the prefix and matcher.</desc>
+<rect width="760" height="540" rx="16" fill="#111827"/>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/></marker></defs>
+<text x="30" y="42" fill="#f3f4f6" font-size="25" font-family="system-ui, sans-serif">Two inputs to the sampling decision</text>
+<rect x="30" y="75" width="330" height="118" rx="10" fill="#1f2937" stroke="#475569"/>
+<text x="48" y="105" fill="#93c5fd" font-size="14" font-family="system-ui, sans-serif">MODEL</text>
+<text x="48" y="140" fill="#f3f4f6" font-size="18" font-family="system-ui, sans-serif">Prompt + generated prefix</text>
+<text x="48" y="168" fill="#f3f4f6" font-size="18" font-family="system-ui, sans-serif">→ next-token logits</text>
+<rect x="400" y="75" width="330" height="118" rx="10" fill="#1f2937" stroke="#475569"/>
+<text x="418" y="105" fill="#93c5fd" font-size="14" font-family="system-ui, sans-serif">MATCHER</text>
+<text x="418" y="140" fill="#f3f4f6" font-size="18" font-family="system-ui, sans-serif">Grammar + tokenizer + prefix</text>
+<text x="418" y="168" fill="#f3f4f6" font-size="18" font-family="system-ui, sans-serif">→ allowed token IDs</text>
+<path d="M195 197 L315 246" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M565 197 L445 246" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="170" y="258" width="420" height="110" rx="10" fill="#1f2937" stroke="#475569"/>
+<text x="195" y="293" fill="#6ee7b7" font-size="14" font-family="system-ui, sans-serif">MASK AND SAMPLE</text>
+<text x="195" y="325" fill="#f3f4f6" font-size="20" font-family="system-ui, sans-serif">Disallow tokens; renormalize;</text>
+<text x="195" y="353" fill="#f3f4f6" font-size="20" font-family="system-ui, sans-serif">sample one surviving choice.</text>
+<path d="M380 373 L380 411" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="95" y="447" fill="#f3f4f6" font-size="23" font-family="system-ui, sans-serif">Append the token and advance the matcher.</text>
+<text x="95" y="485" fill="#cbd5e1" font-size="18" font-family="system-ui, sans-serif">Repeat until valid completion or a recorded stop condition.</text>
+</svg>

@@ -5,7 +5,7 @@
   3. identifier hallucination rate (vs real Mathlib+Batteries name table)
   4. distinct-tactic diversity per goal
 Writes results/scores__<tag>.csv and prints a summary table."""
-import json, re, glob, collections, csv, sys
+import json, re, glob, collections, csv, sys, os, argparse
 from lark import Lark, UnexpectedInput
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -99,7 +99,11 @@ def extract_idents(tactic_args, stmt):
     return sorted(idents)
 
 def main():
-    tag = sys.argv[1] if len(sys.argv) > 1 else "run1"
+    ap = argparse.ArgumentParser()
+    ap.add_argument("tag", nargs="?", default="run1")
+    ap.add_argument("--out", help="Output CSV; default is analysis/scores__TAG.csv")
+    args = ap.parse_args()
+    tag = args.tag
     names = set(json.load(open(os.path.join(DATA, "names.json"), encoding="utf-8")))
     kw_freq = json.load(open(os.path.join(DATA, "kw_freq.json"), encoding="utf-8"))
     real_kw = set(kw_freq.keys())
@@ -130,7 +134,9 @@ def main():
                          "lead_tok": lead_tok, "kw_valid": kw_valid,
                          "flagged": ";".join(flagged), "sorry": sorry, "note": note})
 
-    with open(os.path.join(ROOT, "results", f"scores__{tag}.csv"), "w", newline="") as f:
+    output = args.out or os.path.join(ROOT, "..", "analysis", f"scores__{tag}.csv")
+    os.makedirs(os.path.dirname(os.path.abspath(output)), exist_ok=True)
+    with open(output, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0].keys()) if rows else ["x"])
         w.writeheader()
         w.writerows(rows)
@@ -161,10 +167,10 @@ def main():
   CFG fallback       : {fb:6.1%}
   CFG parse_fail     : {pf:6.1%}   (+ empty {empty:.1%})
   leading-kw real    : {kwv:6.1%}
-  hallucinated ident : {hall:6.1%}   top offenders: {top_flag}
+  identifier flags   : {hall:6.1%}   top offenders: {top_flag}
   contains sorry     : {sorr:6.1%}
   distinct tactics/goal : {div:.2f}
-  mean latency (n={args_n(lat)})   : {sum(lat)/max(len(lat),1):.1f}s""")
+  mean latency (n={args_n(lat)})   : {sum(lat)/max(len(lat),1):.4f}s""")
 
 def args_n(xs):
     return len(xs)

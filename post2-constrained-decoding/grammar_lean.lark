@@ -2,8 +2,9 @@
 // Derived from the 53-production Lark CFG in the research report, simplified
 // for llg: explicit WS terminals (no %ignore), no priorities, no regex
 // lookaheads. Deliberate policy differences from the post-hoc grammar:
-//   * `polyrith` EXCLUDED (confirmed dead in current Mathlib)
-//   * `sorry`/`admit`/`native_decide` NOT reachable (constraint forbids them)
+//   * `polyrith` omitted from named alternatives only.
+//   * The generic rule STILL admits polyrith/sorry/admit/native_decide.
+// This grammar provides no reserved-word or Lean-validity guarantee.
 // ARGS is a permissive catch-all exactly as in the report's design.
 
 start: tactic

@@ -1,0 +1,155 @@
+{
+  "scope": "Saved-output CFG and heuristic analysis; no Lean verification or GPU rerun",
+  "runs": {
+    "constrained__goedel": {
+      "records": 640,
+      "samples": 640,
+      "errors": 0,
+      "goals": 80,
+      "duplicate_sample_keys": 0,
+      "classification_counts": {
+        "fallback": 503,
+        "known_leading_keyword": 15,
+        "identifier_flagged": 408,
+        "sorry_or_admit": 60,
+        "named": 38,
+        "parse_fail": 99
+      },
+      "mean_latency_s": 1.661578125,
+      "median_latency_s": 1.71,
+      "mean_distinct_strings_per_goal": 7.95,
+      "reduced_grammar_disagreements": [],
+      "line_accounting": {
+        "selected_lines": 640,
+        "accepted_lines": 541,
+        "fraction": 0.8453125,
+        "mean_per_nonempty_generation": 0.8453125,
+        "nonempty_generations": 640
+      }
+    },
+    "constrained__qwen": {
+      "records": 640,
+      "samples": 640,
+      "errors": 0,
+      "goals": 80,
+      "duplicate_sample_keys": 0,
+      "classification_counts": {
+        "named": 592,
+        "known_leading_keyword": 584,
+        "identifier_flagged": 339,
+        "sorry_or_admit": 16,
+        "fallback": 48
+      },
+      "mean_latency_s": 0.347296875,
+      "median_latency_s": 0.23,
+      "mean_distinct_strings_per_goal": 7,
+      "reduced_grammar_disagreements": [],
+      "line_accounting": {
+        "selected_lines": 640,
+        "accepted_lines": 640,
+        "fraction": 1.0,
+        "mean_per_nonempty_generation": 1.0,
+        "nonempty_generations": 640
+      }
+    },
+    "native__goedel": {
+      "records": 139,
+      "samples": 139,
+      "errors": 0,
+      "goals": 69,
+      "duplicate_sample_keys": 1,
+      "classification_counts": {
+        "parse_fail": 9,
+        "known_leading_keyword": 130,
+        "identifier_flagged": 30,
+        "sorry_or_admit": 26,
+        "named": 112,
+        "fallback": 18
+      },
+      "mean_latency_s": 12.855755395683452,
+      "median_latency_s": 13.03,
+      "mean_distinct_strings_per_goal": 1.8985507246376812,
+      "reduced_grammar_disagreements": [],
+      "line_accounting": {
+        "selected_lines": 1970,
+        "accepted_lines": 984,
+        "fraction": 0.49949238578680205,
+        "mean_per_nonempty_generation": 0.523246884607732,
+        "nonempty_generations": 121
+      }
+    },
+    "unconstrained__goedel": {
+      "records": 640,
+      "samples": 640,
+      "errors": 0,
+      "goals": 80,
+      "duplicate_sample_keys": 0,
+      "classification_counts": {
+        "parse_fail": 640,
+        "known_leading_keyword": 0,
+        "identifier_flagged": 640,
+        "sorry_or_admit": 0
+      },
+      "mean_latency_s": 1.6826875,
+      "median_latency_s": 1.68,
+      "mean_distinct_strings_per_goal": 5.3,
+      "reduced_grammar_disagreements": [],
+      "line_accounting": {
+        "selected_lines": 1522,
+        "accepted_lines": 936,
+        "fraction": 0.6149802890932983,
+        "mean_per_nonempty_generation": 0.7063042827193771,
+        "nonempty_generations": 636
+      }
+    },
+    "unconstrained__qwen": {
+      "records": 640,
+      "samples": 640,
+      "errors": 0,
+      "goals": 80,
+      "duplicate_sample_keys": 0,
+      "classification_counts": {
+        "named": 388,
+        "known_leading_keyword": 385,
+        "identifier_flagged": 319,
+        "sorry_or_admit": 2,
+        "fallback": 32,
+        "parse_fail": 220
+      },
+      "mean_latency_s": 0.30353125,
+      "median_latency_s": 0.23,
+      "mean_distinct_strings_per_goal": 7.1,
+      "reduced_grammar_disagreements": [],
+      "line_accounting": {
+        "selected_lines": 670,
+        "accepted_lines": 435,
+        "fraction": 0.6492537313432836,
+        "mean_per_nonempty_generation": 0.6500130208333333,
+        "nonempty_generations": 640
+      }
+    }
+  },
+  "counterexamples": {
+    "The first step is to induct on the structure of n.": "fallback",
+    "rw [": "named",
+    "exact (": "named",
+    "sorry": "fallback",
+    "rfl nonsense": "fallback",
+    "simp [DefinitelyNotReal]": "named"
+  },
+  "sha256": {
+    "post2-constrained-decoding/results/constrained__goedel.jsonl": "38e98f31d63f3a9cf59907a733ce08c5af66a1a0ca78536148691529b4777e9d",
+    "post2-constrained-decoding/results/constrained__qwen.jsonl": "3f7ce5f40c067959914615cf8985185c304cd70265f0d49fe997953df26b6303",
+    "post2-constrained-decoding/results/native__goedel.jsonl": "5935542ebaed3c8a0dc09ff6cd226fe8c7c41e909e93699c3a5ddde0b096a0c4",
+    "post2-constrained-decoding/results/unconstrained__goedel.jsonl": "79e50116d1ed5a10a0f9c489820b15a1e6e70a7c2d34ff77375694d82e5a703d",
+    "post2-constrained-decoding/results/unconstrained__qwen.jsonl": "c7f56e6b35bb674080d017e8b0aa5e5fcccf2ee59f7b73b7c86da4fe5ddb4c64",
+    "data/goals.jsonl": "cb878dd4e5963a0a468219d089cdf7223acc518d6037c3a233a063bef623042e",
+    "data/names.json": "fea757cbc369e53c9c7e9b896d72c55ef8d3f6485763567af7e84d1de071516a",
+    "data/kw_freq.json": "0a61741b666414b53def6974b5e392f3e65f8b9155611ed819fa542dca65f6e5",
+    "post2-constrained-decoding/grammar_report.py": "a654b70b84a29d1e7f0d8ad2ec2ead2c8f0811973c41de05848d397da1597891",
+    "post2-constrained-decoding/grammar_lean.lark": "482885dca2d720f2b5d95d37be90ac9e31c9101035f589cbee08e4d5c71175ef",
+    "post2-constrained-decoding/score.py": "f58e8c59ed1016f7e8951150def47266c5470577b1d6f4a201b95aa9e405357b",
+    "post2-constrained-decoding/yield_analysis.py": "ca0930a120e5174ee6010fcae3abe1f0b5d7b9d075b1bde1b77ab2ee3d6d5b8e",
+    "analysis/audit.py": "8afabfc3201f79c7ac854f46f6cf52b3c34e9f3866943c3c01908530cc58b8f5"
+  }
+}

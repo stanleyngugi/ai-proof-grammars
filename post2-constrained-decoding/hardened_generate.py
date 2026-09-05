@@ -1,33 +1,25 @@
 #!/usr/bin/env python3
-"""hardened_generate.py -- drop-in wrapper adding reserved-token enforcement
-on top of grammar-constrained decoding. Rationale: llguidance's rust regex
-engine has no lookaheads, so 'sorry/admit can never appear as an argument'
-isn't expressible inside the CFG itself (see strength_analysis.py: the
-catch-all re-admits keyword-shaped tokens). Generate -> validate -> resample
-costs ~1.03 generations/sample at the observed 2.5% violation rate."""
-import json, re
+"""Optional lexical retry policy, not a Lean proof-safety guarantee.
 
-FORBIDDEN = re.compile(r"(?:^|\s|[\[({])(sorry|admit)(?:\s|$|[\])},])")
+A word-boundary check deliberately over-rejects comments/strings and may reject
+names containing a dotted component 'sorry'. It does not detect all ways a Lean
+proof can depend on admissions. Use actual proof checks for that purpose.
+"""
+import re
 
-def clean(text):
-    return FORBIDDEN.sub(lambda m: m.group(0).replace(m.group(1), "_forbidden_"), text)
+FORBIDDEN = re.compile(r"\b(?:sorry|admit)\b")
+
 
 def hardened_chat(client, *, grammar, n_trials=4, **kw):
-    """Call client.chat.completions.create under `grammar`; retry (up to
-    n_trials) if the output contains forbidden tactic tokens. Returns
-    (text, trials_used). Raises RuntimeError only if ALL trials violated."""
+    """Return (nonempty text, attempts); raise if every output violates policy."""
+    if n_trials < 1:
+        raise ValueError("n_trials must be positive")
+    extra = dict(kw.pop("extra_body", {}) or {})
+    extra.update(guided_grammar=grammar, guided_decoding_backend="guidance")
+    kw["n"] = 1
     for i in range(n_trials):
-        r = client.chat.completions.create(
-            **kw, extra_body={"guided_grammar": grammar})
+        r = client.chat.completions.create(**kw, extra_body=extra)
         text = r.choices[0].message.content or ""
-        if not FORBIDDEN.search(text):
+        if text.strip() and not FORBIDDEN.search(text):
             return text, i + 1
-    return None, n_trials
-
-if __name__ == "__main__":
-    # self-test of the validator
-    assert not FORBIDDEN.search("simp [Nat.le_of_lt]")
-    assert FORBIDDEN.search("exact sorry")
-    assert FORBIDDEN.search("rw [h]; sorry")
-    assert not FORBIDDEN.search("simp [Nat.sorryAx_eq]")   # names containing 'sorry' are fine
-    print("validator self-test OK")
+    raise RuntimeError(f"No output satisfied lexical policy in {n_trials} attempts")
