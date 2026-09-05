@@ -1,8 +1,8 @@
-# Building a Grammar for Lean Tactics: Coverage, Structure, and Constraint Strength
+# The Shape of a Lean Tactic
 
 *What a small grammar captures, what its fallback gives away, and how to measure the difference.*
 
-> **Updated September 5, 2026.** Expanded from the August 22 article with executable examples, a grammar ablation, and explicit measurement definitions. The original corpus figures are retained as historical observations, with their extraction limitations explained below. [Original version](/archive/revisions/2026-08-22-lean-tactic-language-cfg-original.html) · [Evidence and reproduction](https://github.com/stanleyngugi/lean-tactic-research/blob/revise-cfg-articles/docs/evidence.md).
+> **Updated September 5, 2026.** Expanded from the August 22 article with executable examples, a grammar ablation, and explicit measurement definitions. The original corpus figures are retained as historical observations, with their extraction limitations explained below. [Original version](/archive/revisions/2026-08-22-lean-tactic-language-cfg-original.html) · [Evidence and reproduction](https://github.com/stanleyngugi/tactic-grammar-lab/blob/main/docs/evidence.md).
 
 A grammar for Lean tactics begins with an attractive observation. Many proof steps start with a familiar word: `rw`, `simp`, `exact`, `apply`, `intro`. Behind a large mathematical library there appears to be a comparatively small vocabulary of actions. If a language model repeatedly uses those actions, perhaps a compact grammar can guide its generation without representing the entirety of Lean.
 
@@ -279,3 +279,11 @@ python post1-tactic-cfg/strength_analysis.py \
 That command intentionally uses the historical heuristic extractor. Its output is labelled accordingly; repairing arithmetic and paths does not turn extraction into a Lean parser. The provenance document explains which figures can be regenerated from saved outputs and which remain historical report entries.
 
 A compact grammar is still a useful object to investigate. The stronger account of this work is that we can now inspect what its compactness means: a small vocabulary of named forms, a broad fallback, and a measurable tradeoff between coverage and rejection. The next question is what happens when that exact accepted language changes the model’s sampling distribution. That is the subject of the companion article.
+
+## References
+
+<div class="refs">
+<p>Lean contributors. <a href="https://lean-lang.org/doc/reference/latest/Tactic-Proofs/Custom-Tactics/">Custom Tactics</a>. The Lean Language Reference. Syntax extensions, macros, and elaboration.</p>
+<p>Nesterov, V., Kapushev, Y., and Burtsev, M. (2024). <a href="https://openreview.net/forum?id=sjLWmLeJ6R">Lean4trace: Data Augmentation for Neural Theorem Proving in Lean</a>. ICML Workshop on AI for Mathematics.</p>
+<p>Lean community. <a href="https://github.com/leanprover-community/mathlib4">Mathlib</a>. The Lean 4 mathematical library. The dated mutation rerun uses revision 53c82c1c23ec418ebf7290390bc8108957bef853.</p>
+</div>

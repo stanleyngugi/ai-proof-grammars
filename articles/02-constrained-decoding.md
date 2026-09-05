@@ -1,8 +1,8 @@
-# Grammar-Constrained Decoding for Lean Tactics: An Experiment with vLLM and llguidance
+# Lean Tactics Under Constraint
 
 *The sampling mechanism, the saved results, and the boundary between grammar acceptance and Lean correctness.*
 
-> **Updated September 5, 2026.** Expanded from the August 22 article with decoding mechanics, traceable examples, exact counts, and corrected metric definitions. CFG acceptance is not measured Lean validity; latency and line fractions are reported accordingly. [Original version](/archive/revisions/2026-08-22-grammar-constrained-decoding-lean-original.html) · [Evidence and reproduction](https://github.com/stanleyngugi/lean-tactic-research/blob/revise-cfg-articles/docs/evidence.md).
+> **Updated September 5, 2026.** Expanded from the August 22 article with decoding mechanics, traceable examples, exact counts, and corrected metric definitions. CFG acceptance is not measured Lean validity; latency and line fractions are reported accordingly. [Original version](/archive/revisions/2026-08-22-grammar-constrained-decoding-lean-original.html) · [Evidence and reproduction](https://github.com/stanleyngugi/tactic-grammar-lab/blob/main/docs/evidence.md).
 
 A grammar changes which next tokens a language model is allowed to sample. That sounds like a formatting intervention, but its consequences propagate: once a different token is chosen, every later prediction sees a different prefix. The useful experimental question is how that change affects the outputs we actually receive.
 
@@ -356,3 +356,16 @@ python -m unittest discover -s tests
 `analysis/audit.json` includes raw-file hashes, sample and goal counts, classification totals, line accounting, timing summaries, and the reduced-grammar comparison. The article figures are generated from those results. The provenance document identifies recovered files and historical measurements that cannot be reconstructed exactly.
 
 Proof-state interaction and training are preserved as a separate project, with their open questions documented. The CFG experiment can be understood and improved independently. Its next useful extensions are tighter supported grammars, stronger enforcement diagnostics, faithful inputs, and controlled output-interface comparisons. Each asks a specific question about generation before making claims about the larger proving system.
+
+## References
+
+<div class="refs">
+<p>Hui, B., et al. (2024). <a href="https://arxiv.org/abs/2409.12186">Qwen2.5-Coder Technical Report</a>. arXiv:2409.12186.</p>
+<p>Lin, Y., et al. (2025). <a href="https://arxiv.org/abs/2508.03613">Goedel-Prover-V2: Scaling Formal Theorem Proving with Scaffolded Data Synthesis and Self-Correction</a>. arXiv:2508.03613.</p>
+<p>Guidance contributors. <a href="https://github.com/guidance-ai/llguidance">llguidance</a>. Tokenizer-aware grammar constraints and structured generation.</p>
+<p>Kwon, W., et al. (2023). <a href="https://arxiv.org/abs/2309.06180">Efficient Memory Management for Large Language Model Serving with PagedAttention</a>. SOSP 2023. The vLLM serving system.</p>
+<p>Banerjee, D., Suresh, T., Ugare, S., Misailovic, S., and Singh, G. (2025). <a href="https://arxiv.org/abs/2502.09061">CRANE: Reasoning with constrained LLM generation</a>. arXiv:2502.09061.</p>
+<p>Shao, Z., et al. (2024). <a href="https://arxiv.org/abs/2402.03300">DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models</a>. arXiv:2402.03300. Introduces GRPO.</p>
+<p>Yang, K., and Deng, J. (2019). <a href="https://proceedings.mlr.press/v97/yang19a.html">Learning to Prove Theorems via Interacting with Proof Assistants</a>. ICML, PMLR 97, pp. 6984–6994. Introduces ASTactic and CoqGym.</p>
+<p>University of Washington AI for Math. <a href="https://ai.math.uw.edu/projects/spring-2026/">LeanGCD</a>. Spring 2026 project listing; cited as related ongoing work.</p>
+</div>

@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "Please cite this repository when using its code or saved-output analyses. The articles provide their own BibTeX citations."
+title: "Tactic Grammar Lab"
+type: software
+authors:
+  - family-names: Ngugi
+    given-names: Stanley
+repository-code: "https://github.com/stanleyngugi/tactic-grammar-lab"
+url: "https://github.com/stanleyngugi/tactic-grammar-lab"
+abstract: "Experiments in Lean tactic grammars and constrained generation, with saved model outputs and reproducible CPU analyses."
+license: MIT
+keywords:
+  - Lean
+  - context-free grammars
+  - constrained decoding

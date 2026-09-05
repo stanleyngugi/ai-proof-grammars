@@ -1,9 +1,11 @@
-# Lean tactic grammars and constrained generation
+# Tactic Grammar Lab
+
+Experiments in Lean tactic grammars and constrained generation.
 
 Companion code and evidence for two technical articles:
 
-1. [Building a Grammar for Lean Tactics: Coverage, Structure, and Constraint Strength](articles/01-tactic-cfg.md)
-2. [Grammar-Constrained Decoding for Lean Tactics: An Experiment with vLLM and llguidance](articles/02-constrained-decoding.md)
+1. [The Shape of a Lean Tactic](articles/01-tactic-cfg.md)
+2. [Lean Tactics Under Constraint](articles/02-constrained-decoding.md)
 
 The September 2026 revision distinguishes **acceptance by a permissive CFG** from
 Lean syntax validity and proof success. The saved Qwen result reproduces: 420/640
