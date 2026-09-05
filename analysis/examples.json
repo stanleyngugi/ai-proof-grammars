@@ -1,0 +1,57 @@
+{
+  "selection": "Illustrative categories, not a representative random sample",
+  "examples": [
+    {
+      "file": "post2-constrained-decoding/results/constrained__qwen.jsonl",
+      "goal_id": 29184,
+      "name": "Q_idem",
+      "stmt": "theorem Q_idem (q : ℕ) : (Q q : K[X] ⟶ K[X]) ≫ Q q = Q q",
+      "sample_idx": 3,
+      "text": "rewrite category.id_comp",
+      "latency_s": 0.16,
+      "cond": "constrained",
+      "cleaned": "rewrite category.id_comp",
+      "kind": "fallback",
+      "note": ""
+    },
+    {
+      "file": "post2-constrained-decoding/results/unconstrained__qwen.jsonl",
+      "goal_id": 29184,
+      "name": "Q_idem",
+      "stmt": "theorem Q_idem (q : ℕ) : (Q q : K[X] ⟶ K[X]) ≫ Q q = Q q",
+      "sample_idx": 1,
+      "text": "`apply comp_idem`",
+      "latency_s": 0.18,
+      "cond": "unconstrained",
+      "cleaned": "`apply comp_idem`",
+      "kind": "parse_fail",
+      "note": ""
+    },
+    {
+      "file": "post2-constrained-decoding/results/unconstrained__qwen.jsonl",
+      "goal_id": 36579,
+      "name": "iteratedDeriv_succ'",
+      "stmt": "theorem iteratedDeriv_succ' : iteratedDeriv (n + 1) f = iteratedDeriv n (deriv f)",
+      "sample_idx": 7,
+      "text": "induction n with | zero => simp | succ n ih =>\n  have h₁ : deriv (iteratedDeriv n f) = iteratedDeriv (n + 1) f := by ring\n  rw [h₁] at ih\n  simp [ih]\n```",
+      "latency_s": 1.4,
+      "cond": "unconstrained",
+      "cleaned": "induction n with | zero => simp | succ n ih =>",
+      "kind": "named",
+      "note": "multiline:4"
+    },
+    {
+      "file": "post2-constrained-decoding/results/unconstrained__qwen.jsonl",
+      "goal_id": 110604,
+      "name": "condExp_stronglyMeasurable_simpleFunc_bilin",
+      "stmt": "theorem condExp_stronglyMeasurable_simpleFunc_bilin [CompleteSpace E] (hm : m ≤ mΩ) (f : @SimpleFunc Ω m F) {g : Ω → E} (hg : Integrable g μ) : μ[fun ω ↦ B (f ω) (g ω) | m] =ᵐ[μ] fun ω ↦ B (f ω) (μ[g | m] ω)",
+      "sample_idx": 2,
+      "text": "have hB_cont := continuous_comp (continuous_id ∘ f) hg.continuous; sorry",
+      "latency_s": 0.52,
+      "cond": "unconstrained",
+      "cleaned": "have hB_cont := continuous_comp (continuous_id ∘ f) hg.continuous; sorry",
+      "kind": "named",
+      "note": ""
+    }
+  ]
+}

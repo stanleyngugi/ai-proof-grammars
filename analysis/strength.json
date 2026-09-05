@@ -1,0 +1,57 @@
+{
+  "provenance": {
+    "seed": 42,
+    "mathlib_commit": "53c82c1c23ec418ebf7290390bc8108957bef853",
+    "script_sha256": "785211e35109916149ace87ac034ab7762c1749a3781e2ab611a02c03b21f5b3",
+    "extractor_sha256": "8b81bfd259ddadab54c3947809faae688d42c9b2d2cacbb3c8ce532fcdf36ddd",
+    "prose_inputs": {
+      "constrained__goedel.jsonl": "38e98f31d63f3a9cf59907a733ce08c5af66a1a0ca78536148691529b4777e9d",
+      "native__goedel.jsonl": "5935542ebaed3c8a0dc09ff6cd226fe8c7c41e909e93699c3a5ddde0b096a0c4",
+      "unconstrained__goedel.jsonl": "79e50116d1ed5a10a0f9c489820b15a1e6e70a7c2d34ff77375694d82e5a703d"
+    }
+  },
+  "reference_rejected": 9,
+  "scope": "Mutation sensitivity; historical heuristic extraction, not Lean syntax validity",
+  "sample_size": 5000,
+  "extracted_entries": 145168,
+  "files": 8373,
+  "classes": {
+    "B_english_lead": [
+      0,
+      824
+    ],
+    "F_ident_soup": [
+      0,
+      844
+    ],
+    "C_wrong_tactic_kw": [
+      0,
+      795
+    ],
+    "D1_arg_shuffle": [
+      1,
+      725
+    ],
+    "D2_full_shuffle": [
+      217,
+      741
+    ],
+    "A_truncation": [
+      1,
+      854
+    ]
+  },
+  "prose": [
+    0,
+    1630
+  ],
+  "combined": {
+    "rejected": 219,
+    "total": 6413
+  },
+  "hardened_combined": {
+    "rejected": 290,
+    "total": 6413
+  },
+  "aggregation_note": "Each class is [rejected, tested]; unchanged mutations excluded. Prose included in numerator and denominator."
+}

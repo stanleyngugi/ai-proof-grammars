@@ -1,78 +1,101 @@
-# Grammar-Constrained Decoding for Lean 4 Tactics
+# Tactic Grammar Lab
 
-Companion code for a research blog series on measuring — and then using —
-grammar constraints for LLM-driven Lean 4 theorem proving.
+Experiments in Lean tactic grammars and constrained generation.
 
-**Posts**
-1. [Lean's Tactic Language Is Smaller Than It Looks](https://stanleyngugi.netlify.app/posts/2026-08-22-lean-tactic-language-cfg)
-   → `post1-tactic-cfg/`
-2. [A Quarter of Your Prover's Tokens Never Reach the Judge](https://stanleyngugi.netlify.app/posts/2026-08-22-grammar-constrained-decoding-lean)
-   → `post2-constrained-decoding/`
+Companion code and evidence for two technical articles:
 
-## Structure
+1. [The Shape of a Lean Tactic](articles/01-tactic-cfg.md)
+2. [Lean Tactics Under Constraint](articles/02-constrained-decoding.md)
 
-```
-data/                            shared artifacts (sampled goals, keyword
-                                 frequencies, 163k-declaration name table)
-post1-tactic-cfg/
-  lean_experiments.py            consolidated original experiment code:
-                                 extraction (colGt-aware continuation
-                                 merging), the 53-production CFG, name
-                                 extraction, hallucination checker,
-                                 Layer-0 harness, macro bridges
-  grammar_report.py              the CFG as a module
-  prep_data.py                   rebuild data/ from a mathlib4 clone
-  strength_analysis.py           mutation battery measuring constraint
-                                 STRENGTH (the number post 1 declines to
-                                 claim; addendum: ~3.5% overall rejection)
-post2-constrained-decoding/
-  gen_eval.py                    unconstrained vs grammar-constrained
-                                 generation via vLLM + llguidance
-  score.py                       CFG-validity / keyword / hallucination
-                                 scoring
-  yield_analysis.py              kernel-reachable line-yield accounting
-  hardened_generate.py           reserved-token enforcement wrapper
-                                 (generate -> validate -> resample)
-  results/                       raw generations + score CSVs
-pantograph-harness/
-  kernel_loop.py                 closed-loop client for the Pantograph
-                                 REPL with per-step feedback taxonomy
-  ite_mul_one_replay.py          end-to-end proof replay against a real
-                                 Mathlib environment
-```
+The September 2026 revision distinguishes **acceptance by a permissive CFG** from
+Lean syntax validity and proof success. The saved Qwen result reproduces: 420/640
+first cleaned lines accepted without the configured constraint, 640/640 with it.
+This repository does not claim measured kernel contact, token savings, or training
+improvement from those counts.
 
-## Reproducing
+## Reproduce saved-output analysis (CPU only)
+
+Python 3.10+ is required; validated with Python 3.12 and Lark 1.3.1.
 
 ```bash
-pip install -r requirements.txt
-
-# post 1 (CPU only): needs shallow clones of mathlib4 + batteries next to repo root
-python3 post1-tactic-cfg/prep_data.py
-python3 post1-tactic-cfg/strength_analysis.py
-
-# post 2: needs a CUDA GPU + vLLM serving one of the models
-python3 -m vllm serve <model-dir> --served-model-name m \
-  --max-model-len 4096 --gpu-memory-utilization 0.92 --enforce-eager \
-  --guided-decoding-backend guidance
-python3 post2-constrained-decoding/gen_eval.py --cond unconstrained --tag run1
-python3 post2-constrained-decoding/gen_eval.py --cond constrained --tag run1
-python3 post2-constrained-decoding/score.py run1
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -r requirements-analysis.txt
+python analysis/audit.py
+python post2-constrained-decoding/score.py qwen
+python post2-constrained-decoding/yield_analysis.py
+python -m unittest discover -s tests -v
 ```
 
-## Pins & known gotchas (these will bite you otherwise)
+No model downloads, GPU, Lean installation, or API key are needed. Raw JSONL files
+and original score CSVs remain under `post2-constrained-decoding/results/`.
+Regenerated scores and summaries go to `analysis/`, including an input-hash
+manifest, exact denominators, examples with sample IDs, and the reduced-grammar
+ablation. [Evidence map](docs/evidence.md) · [Provenance](docs/provenance.md).
 
-- `vllm==0.10.2` — newer engines had issues on our stack; also flashinfer
-  must be uninstalled (`array.array` annotation crash at import).
-- **vLLM silently drops grammar enforcement under parallel sampling
-  (`n > 1`) and can fall back to unconstrained decoding on per-request
-  backend errors.** Request `n=1`, pin the backend server-side
-  (`--guided-decoding-backend guidance`), and assert enforcement post-hoc.
-- Pantograph version-pins Lean exactly; this series used Pantograph commit
-  `c6136e8` (Lean v4.23.0) with Mathlib tag `v4.23.0`.
-- Launch the REPL *with import arguments* (`repl Init ...`) — bare launch
-  yields an empty environment where even core notation fails to parse.
+## Mutation sensitivity
+
+```bash
+python post1-tactic-cfg/strength_analysis.py \
+  --mathlib /path/to/mathlib4 --out analysis/strength.json
+```
+
+The committed rerun uses Mathlib revision
+`53c82c1c23ec418ebf7290390bc8108957bef853`, seed 42, and 5,000 sampled entries.
+This command uses the **historical heuristic extractor**, whose over-merging is
+illustrated and tested. Its entries are not validated individual Lean tactic
+applications. Do not compare different corpus revisions as identical runs.
+
+To rebuild heuristic input tables, choose a separate output directory:
+
+```bash
+python post1-tactic-cfg/prep_data.py --mathlib /path/to/mathlib4 \
+  --batteries /path/to/batteries --out /tmp/new-cfg-inputs -n 80
+```
+
+Do not overwrite the committed inputs when reproducing the published saved-output
+analysis. The historical goal sampler can include malformed/missing-context
+statements; it is retained for provenance, not recommended as a validated benchmark.
+
+## Figures
+
+```bash
+pip install -r requirements-figures.txt
+python analysis/figures.py
+```
+
+This creates four standalone SVG illustrations under `articles/assets/`.
+The statistical plots read committed analysis outputs. Conceptual diagrams are
+explicit illustrations, not model traces. Website rendering instructions live in
+the website repository; the Markdown articles here are the canonical sources.
+
+## Historical generation
+
+`gen_eval.py` retains the vLLM 0.10.2 request configuration, with sample-level resume
+tracking repaired. `requirements.txt` is the historical serving requirements
+file, separate from the lightweight analysis dependencies. A compatible served
+model and GPU environment are needed for new generations. This revision did not
+rerun GPU generation or establish a general backend bug.
+
+`grammar_lean.lark` is the generation language; `grammar_report.py` is the scoring
+language. They differ. The generic alternative admits prose and omitted words
+such as `sorry`; acceptance does not certify Lean syntax or admissions policy.
+The optional `hardened_generate.py` wrapper is a bounded lexical retry policy,
+not a proof checker. Always validate enforcement with the exact generation
+language and retain request configuration and termination information.
+
+## Scope separation
+
+Pantograph, solver orchestration, and later model/proof-state work were moved to
+the sibling `lean-proving-experiments` project. Their historical paths contain
+pointers, and their source remains in Git history at `a147ec9`. That future project
+preserves proposals, ideas, original code, and known evaluator bugs. It is deferred
+while these two articles and their evidence are the publication focus.
 
 ## License
 
-MIT (see LICENSE). Mathlib/Batteries-derived artifacts retain their
-upstream Apache-2.0/MIT licensing with attribution.
+MIT for the project code (see LICENSE). Mathlib and Batteries derived material
+retains its upstream licensing: see [Mathlib](https://github.com/leanprover-community/mathlib4)
+and [Batteries](https://github.com/leanprover-community/batteries). The source-derived
+artifacts are included to make the experiment inspectable, with their extraction
+limitations documented rather than presented as an authoritative Lean environment.

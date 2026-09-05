@@ -1,54 +1,61 @@
 #!/usr/bin/env python3
-"""yield_analysis.py -- reframes results through the feedback-yield lens:
-what fraction of generated tactic LINES can reach the kernel (syntactically
-evaluable), per condition. Kernel-reachable line = parses under the CFG."""
-import json, re, sys, os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+"""Historical line selection: CFG acceptance, not kernel reachability."""
+import argparse
+import json
+import re
+from pathlib import Path
 from lark import Lark, UnexpectedInput
-from grammar_report import GRAMMAR, NAMED_RULES
+from grammar_report import GRAMMAR
 
-lp = Lark(GRAMMAR, start="start", parser="earley")
+parser = Lark(GRAMMAR, parser="earley")
 
-def kind(line):
-    try:
-        t = lp.parse(line)
-        node = t.children[0].children[0]
-        rule = node.data.value if hasattr(node.data, "value") else str(node.data)
-        return "named" if rule in NAMED_RULES else "fallback"
-    except (UnexpectedInput, Exception):
-        return "parse_fail"
 
 def lines_of(text):
-    """Tactic-candidate lines from a generation: fenced block if present,
-    else nonempty non-header lines; strips bullets/commas."""
+    """Preserve historical selection: first closed fence or nonempty non-header lines."""
     m = re.search(r"```(?:lean)?\n(.*?)```", text, re.S)
     body = m.group(1) if m else text
-    out = []
-    for ln in body.splitlines():
-        s = ln.strip().rstrip(",").strip()
-        if not s or s.startswith(("--", "#", "###", "**", "Theorem:", "Proof:")):
-            continue
-        out.append(s)
-    return out
+    result = []
+    for line in body.splitlines():
+        s = line.strip().rstrip(",").strip()
+        if s and not s.startswith(("--", "#", "###", "**", "Theorem:", "Proof:")):
+            result.append(s)
+    return result
 
-def report(path, label):
-    rows = [json.loads(l) for l in open(path, encoding="utf-8") if '"text"' in l]
-    tot = ok = 0
-    per_gen_yield = []
-    for r in rows:
-        ls = lines_of(r.get("text") or "")
-        ks = [kind(x) for x in ls]
-        n = len(ks)
-        k = sum(1 for x in ks if x != "parse_fail")
-        tot += n; ok += k
+
+def valid(text):
+    try:
+        parser.parse(text)
+        return True
+    except UnexpectedInput:
+        return False
+
+
+def measure(rows):
+    total = accepted = 0
+    ratios = []
+    for row in rows:
+        lines = lines_of(row.get("text") or "")
+        n = len(lines)
+        k = sum(map(valid, lines))
+        total += n
+        accepted += k
         if n:
-            per_gen_yield.append(k / n)
-    avg = sum(per_gen_yield) / max(len(per_gen_yield), 1)
-    print(f"{label:34s} lines={tot:5d}  kernel-reachable={ok/tot:6.1%}   "
-          f"mean per-gen yield={avg:6.1%}")
+            ratios.append(k/n)
+    return {"selected_lines": total, "accepted_lines": accepted,
+            "fraction": accepted/total if total else None,
+            "mean_per_nonempty_generation": sum(ratios)/len(ratios) if ratios else None,
+            "nonempty_generations": len(ratios)}
 
-base = os.path.join(os.path.dirname(os.path.abspath(__file__)), "results")
-report(os.path.join(base, "unconstrained__qwen.jsonl"), "Qwen unconstrained (1st-tac)")
-report(os.path.join(base, "constrained__qwen.jsonl"), "Qwen constrained (1st-tac)")
-report(os.path.join(base, "native__goedel.jsonl"), "Goedel native (full proofs)")
-report(os.path.join(base, "constrained__goedel.jsonl"), "Goedel 'constrained' (degraded*)")
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--results", type=Path, default=Path(__file__).resolve().parent / "results")
+    args = ap.parse_args()
+    for path in sorted(args.results.glob("*.jsonl")):
+        rows = [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
+        rows = [r for r in rows if "text" in r and "error" not in r]
+        print(path.name, json.dumps(measure(rows)))
+
+
+if __name__ == "__main__":
+    main()
